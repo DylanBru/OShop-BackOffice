@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
+
 // Si j'ai besoin du Model Category
 // use App\Models\Category;
 
@@ -22,7 +25,13 @@ class MainController extends CoreController
 
     public function category()
     {
-        $this->show('main/category');
+        $modelCategory = new Category;
+        $categoriesList = $modelCategory->findAll();
+
+        $this->show('main/category',
+                    [
+                        "categoriesList" => $categoriesList
+                    ]);
     }
 
     public function categoryAdd()
@@ -32,7 +41,13 @@ class MainController extends CoreController
 
     public function product()
     {
-        $this->show('main/product');
+        $modelProduct = new Product;
+        $productsList = $modelProduct->findAll();
+        
+        $this->show('main/product',
+                    [
+                        "productsList" => $productsList
+                    ]);
     }
 
     public function productAdd()
