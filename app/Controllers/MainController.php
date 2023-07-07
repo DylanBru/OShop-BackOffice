@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
+
 // Si j'ai besoin du Model Category
 // use App\Models\Category;
 
@@ -13,16 +16,34 @@ class MainController extends CoreController
      * @return void
      */
     public function home()
-    {
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
-        $this->show('main/home');
+    {  
+        $modelCategory = new Category;
+        $categoriesListHomePage = $modelCategory->findAllHomepage();
+
+        $modelProduct = new Product;
+        $productsListHomePage = [];
+        foreach ($categoriesListHomePage as $category) {
+            $productsListHomePage[] = $modelProduct->findAllByCategory($category->getId());
+        }
+        // $productsListHomePage = $modelProduct->findAllByCategory(3);
+        // dd($categoriesListHomePage, $productsListHomePage);
+
+        $this->show('main/home',
+                    [
+                        "categoriesListHomePage" => $categoriesListHomePage,
+                        "productsListHomePage" => $productsListHomePage
+                    ]);
     }
 
     public function category()
     {
-        $this->show('main/category');
+        $modelCategory = new Category;
+        $categoriesList = $modelCategory->findAll();
+
+        $this->show('main/category',
+                    [
+                        "categoriesList" => $categoriesList
+                    ]);
     }
 
     public function categoryAdd()
@@ -32,7 +53,13 @@ class MainController extends CoreController
 
     public function product()
     {
-        $this->show('main/product');
+        $modelProduct = new Product;
+        $productsList = $modelProduct->findAll();
+        
+        $this->show('main/product',
+                    [
+                        "productsList" => $productsList
+                    ]);
     }
 
     public function productAdd()
