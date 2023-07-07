@@ -94,6 +94,28 @@ class Product extends CoreModel
     }
 
     /**
+     * Méthode permettant de récupérer tous les produits qui ont la même catégorie
+     *
+     * @return Product[]
+     */
+    public function findAllByCategory($category_id)
+    {
+        $pdo = Database::getPDO();
+
+        $sql = "SELECT product.id, product.name, product.category_id, category.name AS categoryName
+                FROM `product`
+                INNER JOIN category
+                ON product.category_id = category.id
+                WHERE product.category_id = $category_id";
+
+        $pdoStatement = $pdo->query($sql);
+        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Product');
+
+        return $results;
+    }
+
+
+    /**
      * Get the value of name
      *
      * @return  string

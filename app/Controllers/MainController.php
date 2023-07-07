@@ -16,11 +16,23 @@ class MainController extends CoreController
      * @return void
      */
     public function home()
-    {
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
-        $this->show('main/home');
+    {  
+        $modelCategory = new Category;
+        $categoriesListHomePage = $modelCategory->findAllHomepage();
+
+        $modelProduct = new Product;
+        $productsListHomePage = [];
+        foreach ($categoriesListHomePage as $category) {
+            $productsListHomePage[] = $modelProduct->findAllByCategory($category->getId());
+        }
+        // $productsListHomePage = $modelProduct->findAllByCategory(3);
+        // dd($categoriesListHomePage, $productsListHomePage);
+
+        $this->show('main/home',
+                    [
+                        "categoriesListHomePage" => $categoriesListHomePage,
+                        "productsListHomePage" => $productsListHomePage
+                    ]);
     }
 
     public function category()
