@@ -13,15 +13,24 @@ class CategoryController extends CoreController
      */
     public function add()
     {
-        // Préparer les données ( = en général les récupérer depuis la BDD )
-        $name = filter_input(INPUT_GET, 'name');
-        $subtitle = filter_input(INPUT_GET, 'subtitle');
-        $picture = filter_input(INPUT_GET, 'picture');
-
-        var_dump($name, $subtitle, $picture);
         // On appelle la méthode show() de l'objet courant
         $this->show('category/add');
     }
+    
+    public function getPost()
+    {
+        $name = filter_input(INPUT_POST, 'name');
+        $subtitle = filter_input(INPUT_POST, 'subtitle');
+        $picture = filter_input(INPUT_POST, 'picture');
+        
+        $categoryModel = new Category;
+        $categoryModel->setName("$name");
+        $categoryModel->setSubtitle("$subtitle");
+        $categoryModel->setPicture("$picture");
+
+        $categoryModel->insert();
+    }
+
     /**
      * Méthode s'occupant de l'affichage de la liste des catégories
      *

@@ -171,4 +171,21 @@ class Category extends CoreModel
 
         return $categories;
     }
+
+    /**
+     * Ajouter une catégorie en BDD grâce au formulaire
+     *
+     * @return void
+     */
+    public function insert()
+    {
+        $pdo = Database::getPDO();
+        $sql = '
+            INSERT INTO category (name, subtitle, picture) 
+            VALUES ( "' . $this->getName() . '" , "' . $this->getSubtitle() . '",  "' .  $this->getPicture() . '")
+        ';
+        $pdo->exec($sql);
+    }
 }
+
+

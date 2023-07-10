@@ -6,6 +6,9 @@
 // inclusion des dépendances via Composer
 // autoload.php permet de charger d'un coup toutes les dépendances installées avec composer
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
+
+use App\Models\Category;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /* ------------
@@ -73,6 +76,16 @@ $router->map(
     'category-add'
 );
 
+$router->map(
+    'POST',
+    '/category/add',
+    [
+        'method' => 'getPost',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-post'
+);
+
 /* PRODUCT */ 
 
 $router->map(
@@ -111,4 +124,4 @@ $dispatcher = new Dispatcher($match, '\App\Controllers\ErrorController::err404')
 // Une fois le "dispatcher" configuré, on lance le dispatch qui va exécuter la méthode du controller
 $dispatcher->dispatch();
 
-var_dump($_POST);
+
