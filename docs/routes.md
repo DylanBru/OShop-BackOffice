@@ -1,17 +1,21 @@
 # Routes
 
+## Sprint 1
 
 | URL | HTTP Method | Controller | Method | Title | Content | Comment |
 |--|--|--|--|--|--|--|
-| `/` | `GET` | `MainController` | `home` | | 5 categories + liste des produits appartenant à ces catégories permettant de controler les catégories à afficher| - |
-| `/authentification` | `POST` | `AuthController` | `authentification` | authentification | fenêtre qui permet de s'authentifier avec un champ id et modt de passe | - |
-| `/categories` | `GET` | `MainController` | `category` | Catégories | liste des catégories | - |
-| `/products` | `GET` | `MainController` | `product` | Products | liste des produits | - |
-| `/types` | `GET` | `MainController` | `type` | Types | liste des types | - |
-| `/brand` | `GET` | `MainController` | `brand` | Marques | liste des marques | - |
-| `/tags` | `GET` | `MainController` | `Tags` | Tags | liste des Tags | - |
-| `/categories_add` | `GET` | `MainController` | `category_add` | Catégory_add | - | ajouter une catégorie |
-| `/products_add` | `GET` | `MainController` | `product_add` | Product_add | - | ajouter un produit |
-| `/types_add` | `GET` | `MainController` | `type_add` | Type_add | - | ajouter un type |
-| `/brand_add` | `GET` | `MainController` | `brand_add` | Marque_add | - | ajouter une marque |
-| `/tags_add` | `GET` | `MainController` | `Tags_add` | Tag_add | - | ajouter un tag |
+| `/` | `GET` | `MainController` | `home` | Bienvenue dans le backoffice | displays last 3 updated products and categories | - |
+| `/category/` | `GET` | `CategoryController` | `browse` | Liste des catégories | shows all categories | - |
+| `/category/read/[i:id]` | `GET` | `CategoryController` | `read` | Détail de la catégorie [NOM de la Catégorie] | shows details of one category | TODO + id = category ID in DB |
+| `/category/edit/[i:id]` | `GET` | `CategoryController` | `edit` | Modification de la catégorie [NOM de la Catégorie] | displays update form of one category | id = category ID in DB |
+| `/category/edit/[i:id]` | `POST` | `CategoryController` | `editExecute` | - | update one category in DB | id = category ID in DB |
+| `/category/add` | `GET` | `CategoryController` | `add` | Ajout d'une catégorie | shows add form of a category | - |
+| `/category/add` | `POST` | `CategoryController` | `addExecute` | - | insert one category in DB | - |
+| `/category/delete/[i:id]` | `GET` | `CategoryController` | `delete` | - | delete one category | id = category ID in DB |
+| `/product/` | `GET` | `ProductController` | `browse` | Liste des produits | shows all products | - |
+| `/product/read/[i:id]` | `GET` | `ProductController` | `read` | Détail du produit [NOM du Produit] | shows details of one product | TODO + id = product ID in DB |
+| `/product/edit/[i:id]` | `GET` | `ProductController` | `edit` | Modification du produit [NOM du Produit] | displays update form of one product | id = product ID in DB |
+| `/product/edit/[i:id]` | `POST` | `ProductController` | `editExecute` | - | update one product in DB | id = product ID in DB |
+| `/product/add` | `GET` | `ProductController` | `add` | Ajout d'un produit | shows add form of a product | - |
+| `/product/add` | `POST` | `ProductController` | `addExecute` | - | insert one product in DB | - |
+| `/product/delete/[i:id]` | `GET` | `ProductController` | `delete` | - | delete one product | id = product ID in DB |

@@ -99,7 +99,7 @@ class Category extends CoreModel
      * @param int $categoryId ID de la catégorie
      * @return Category
      */
-    public function find($categoryId)
+    public static function find($categoryId)
     {
         // se connecter à la BDD
         $pdo = Database::getPDO();
@@ -122,7 +122,7 @@ class Category extends CoreModel
      *
      * @return Category[]
      */
-    public function findAll()
+    public static function findAll()
     {
         $pdo = Database::getPDO();
         $sql = 'SELECT * FROM `category`';
@@ -133,11 +133,31 @@ class Category extends CoreModel
     }
 
     /**
+     * Récupérer les 3 catégories à afficher sur la home du backoffice
+     *
+     * @return Category[]
+     */
+    public static function findLast3()
+    {
+        $pdo = Database::getPDO();
+        $sql = '
+            SELECT *
+            FROM category
+            ORDER BY updated_at DESC, created_at DESC
+            LIMIT 3;
+        ';
+        $pdoStatement = $pdo->query($sql);
+        $categories = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Category');
+
+        return $categories;
+    }
+
+    /**
      * Récupérer les 5 catégories mises en avant sur la home
      *
      * @return Category[]
      */
-    public function findAllHomepage()
+    public static function findAllHomepage()
     {
         $pdo = Database::getPDO();
         $sql = '

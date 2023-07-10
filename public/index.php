@@ -6,7 +6,7 @@
 // inclusion des dépendances via Composer
 // autoload.php permet de charger d'un coup toutes les dépendances installées avec composer
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
-require_once '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 /* ------------
 --- ROUTAGE ---
@@ -40,6 +40,7 @@ if (array_key_exists('BASE_URI', $_SERVER)) {
 // 4. Le nom de la route : pour identifier la route, on va suivre une convention
 //      - "NomDuController-NomDeLaMéthode"
 //      - ainsi pour la route /, méthode "home" du MainController => "main-home"
+
 $router->map(
     'GET',
     '/',
@@ -50,45 +51,48 @@ $router->map(
     'main-home'
 );
 
+/* CATEGORY */ 
 
 $router->map(
     'GET',
-    '/categories',
+    '/category',
     [
-        'method' => 'category',
-        'controller' => '\App\Controllers\MainController' 
+        'method' => 'browse',
+        'controller' => '\App\Controllers\CategoryController' // On indique le FQCN de la classe
     ],
-    'main-category'
+    'category-browse'
 );
 
 $router->map(
     'GET',
-    '/products',
+    '/category/add',
     [
-        'method' => 'product',
-        'controller' => '\App\Controllers\MainController' 
+        'method' => 'add',
+        'controller' => '\App\Controllers\CategoryController'
     ],
-    'main-product'
+    'category-add'
+);
+
+/* PRODUCT */ 
+
+$router->map(
+    'GET',
+    '/product',
+    [
+        'method' => 'browse',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-browse'
 );
 
 $router->map(
     'GET',
-    '/category_add',
+    '/product/add',
     [
-        'method' => 'categoryAdd',
-        'controller' => '\App\Controllers\MainController' 
+        'method' => 'add',
+        'controller' => '\App\Controllers\ProductController'
     ],
-    'main-category_add'
-);
-
-$router->map(
-    'GET',
-    '/product_add',
-    [
-        'method' => 'productAdd',
-        'controller' => '\App\Controllers\MainController' 
-    ],
-    'main-product_add'
+    'product-add'
 );
 
 /* -------------
@@ -97,6 +101,7 @@ $router->map(
 
 // On demande à AltoRouter de trouver une route qui correspond à l'URL courante
 $match = $router->match();
+// dd($match);
 
 // Ensuite, pour dispatcher le code dans la bonne méthode, du bon Controller
 // On délègue à une librairie externe : https://packagist.org/packages/benoclock/alto-dispatcher
@@ -105,3 +110,5 @@ $match = $router->match();
 $dispatcher = new Dispatcher($match, '\App\Controllers\ErrorController::err404');
 // Une fois le "dispatcher" configuré, on lance le dispatch qui va exécuter la méthode du controller
 $dispatcher->dispatch();
+
+var_dump($_POST);
