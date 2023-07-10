@@ -29,6 +29,7 @@ class CategoryController extends CoreController
         $categoryModel->setPicture("$picture");
 
         $categoryModel->insert();
+        header('Location: ' . __DIR__ . '/../views/main/home.tpl.php');    
     }
 
     /**
