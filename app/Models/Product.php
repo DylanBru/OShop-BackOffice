@@ -55,7 +55,7 @@ class Product extends CoreModel
      * @param int $productId ID du produit
      * @return Product
      */
-    public function find($productId)
+    public static function find($productId)
     {
         // récupérer un objet PDO = connexion à la BDD
         $pdo = Database::getPDO();
@@ -83,7 +83,7 @@ class Product extends CoreModel
      *
      * @return Product[]
      */
-    public function findAll()
+    public static function findAll()
     {
         $pdo = Database::getPDO();
         $sql = 'SELECT * FROM `product`';
@@ -92,28 +92,6 @@ class Product extends CoreModel
 
         return $results;
     }
-
-    /**
-     * Méthode permettant de récupérer tous les produits qui ont la même catégorie
-     *
-     * @return Product[]
-     */
-    public function findAllByCategory($category_id)
-    {
-        $pdo = Database::getPDO();
-
-        $sql = "SELECT product.id, product.name, product.category_id, category.name AS categoryName
-                FROM `product`
-                INNER JOIN category
-                ON product.category_id = category.id
-                WHERE product.category_id = $category_id";
-
-        $pdoStatement = $pdo->query($sql);
-        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Product');
-
-        return $results;
-    }
-
 
     /**
      * Get the value of name
