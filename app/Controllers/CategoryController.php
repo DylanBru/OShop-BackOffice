@@ -96,6 +96,11 @@ class CategoryController extends CoreController
         $categoryToEdit->setPicture($picture);
 
         $categoryToEdit->update();
+
+        global $router;
+        header('Location: ' . $router->generate('category-browse'));
+
+        exit;
     }
 
     /**
