@@ -29,7 +29,12 @@ class CategoryController extends CoreController
         $categoryModel->setPicture($picture);
 
         $categoryModel->insert();
-        header('Location: ' . __DIR__ . '/../views/main/home.tpl.php');    
+        
+        global $router;
+        // une fois le formulaire traité on redirige l'utilisateur
+        header('Location: ' . $router->generate('category-browse'));
+
+        exit;    
     }
 
     /**
