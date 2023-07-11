@@ -93,6 +93,16 @@ $router->map(
     'category-edit'
 );
 
+$router->map(
+    'POST',
+    '/category/edit/[i:id]',
+    [
+        'method' => 'editExecute',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-editExecute'
+);
+
 /* PRODUCT */ 
 
 $router->map(

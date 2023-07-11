@@ -82,6 +82,22 @@ class CategoryController extends CoreController
                     ]);
     }
 
+    public function editExecute($params)
+    {
+        $name = filter_input(INPUT_POST, 'name');
+        $subtitle = filter_input(INPUT_POST, 'subtitle');
+        $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+
+        $modelCategory = new Category;
+        $categoryToEdit = $modelCategory->find($params);
+
+        $categoryToEdit->setName($name);
+        $categoryToEdit->setSubtitle($subtitle);
+        $categoryToEdit->setPicture($picture);
+
+        $categoryToEdit->update();
+    }
+
     /**
      * Méthode s'occupant de l'affichage de la liste des catégories
      *
