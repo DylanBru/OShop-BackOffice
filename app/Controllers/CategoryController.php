@@ -24,9 +24,9 @@ class CategoryController extends CoreController
         $picture = filter_input(INPUT_POST, 'picture');
         
         $categoryModel = new Category;
-        $categoryModel->setName("$name");
-        $categoryModel->setSubtitle("$subtitle");
-        $categoryModel->setPicture("$picture");
+        $categoryModel->setName($name);
+        $categoryModel->setSubtitle($subtitle);
+        $categoryModel->setPicture($picture);
 
         $categoryModel->insert();
         header('Location: ' . __DIR__ . '/../views/main/home.tpl.php');    
