@@ -18,6 +18,7 @@ class CategoryController extends CoreController
         // On appelle la méthode show() de l'objet courant
         $this->show('category/add');
     }
+    
 
     /**
      * Traite le formulaire d'ajout
@@ -49,12 +50,12 @@ class CategoryController extends CoreController
 
         // on crée un modèle 
         $categoryToInsert = new Category();
-
+        
         // que l'on rempli ( on l'hydrate ) avec les données saisies par l'utilisateur
         $categoryToInsert->setName($name);
         $categoryToInsert->setSubtitle($subtitle);
         $categoryToInsert->setPicture($picture);
-
+        
         // on lance la requête d'insertion
         $categoryToInsert->insert();
 

@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Type;
 
 class ProductController extends CoreController
 {
@@ -88,6 +90,59 @@ class ProductController extends CoreController
         // TODO se débarasser de ce global !!!!
         global $router;
         // une fois le formulaire traité on redirige l'utilisateur
+        header('Location: ' . $router->generate('product-browse'));
+
+        exit;
+    }
+
+    public function edit($params)
+    {
+        $modelProduct = new Product;
+        $allCategoryList = Category::findAll();
+        $allBrandList = Brand::findAll();
+        $allTypeList = Type::findAll();
+        $productToEdit = $modelProduct->find($params);
+
+
+        global $router;
+
+        $this->show("product/edit",
+                    [
+                        "productToEdit" => $productToEdit,
+                        "allCategoryList" => $allCategoryList,
+                        "allBrandList" => $allBrandList,
+                        "allTypeList" => $allTypeList
+                    ]);
+    }
+
+    public function editExecute($params)
+    {
+        $name = filter_input(INPUT_POST, 'name');
+        $description = filter_input(INPUT_POST, 'description');
+        $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+        $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
+        $rate = filter_input(INPUT_POST, 'rate', FILTER_VALIDATE_INT);
+        $status = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT);
+        $categoryId = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
+        $brandId = filter_input(INPUT_POST, 'brand_id', FILTER_VALIDATE_INT);
+        $typeId = filter_input(INPUT_POST, 'type_id', FILTER_VALIDATE_INT);
+
+        $modelProduct = new Product;
+        $productToEdit = $modelProduct->find($params);
+
+        $productToEdit->setName($name);
+        $productToEdit->setDescription($description);
+        $productToEdit->setPicture($picture);
+        $productToEdit->setPrice($price);
+        $productToEdit->setRate($rate);
+        $productToEdit->setStatus($status);
+        $productToEdit->setCategoryId($categoryId);
+        $productToEdit->setBrandId($brandId);
+        $productToEdit->setTypeId($typeId);
+
+        $productToEdit->update();
+
+        global $router;
         header('Location: ' . $router->generate('product-browse'));
 
         exit;

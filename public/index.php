@@ -135,6 +135,26 @@ $router->map(
     'product-addExecute'
 );
 
+$router->map(
+    'GET',
+    '/product/edit/[i:id]',
+    [
+        'method' => 'edit',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-edit'
+);
+
+$router->map(
+    'POST',
+    '/product/edit/[i:id]',
+    [
+        'method' => 'editExecute',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-editExecute'
+);
+
 /* -------------
 --- DISPATCH ---
 --------------*/

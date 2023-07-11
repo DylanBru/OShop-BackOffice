@@ -49,6 +49,47 @@ class Product extends CoreModel
      */
     private $type_id;
 
+
+    /**
+     * Méthode permettant d'ajouter un enregistrement dans la BDD
+     *
+     * @return bool
+     */
+    public function update()
+    {
+        $pdo = Database::getPDO();
+        $sql = "
+            UPDATE `product`
+            SET
+                name = :name,
+                description = :description,
+                picture = :picture,
+                price = :price,
+                rate = :rate,
+                status = :status,
+                category_id = :categoryId,
+                brand_id = :brandId,
+                type_id = :typeId,
+                updated_at = NOW()
+            WHERE id = :id
+        ";
+
+        $preparedQuery = $pdo->prepare($sql);
+
+        $preparedQuery->execute([
+            ':id' => $this->id,
+            ':name' => $this->name,
+            ':description' => $this->description,
+            ':picture' => $this->picture,
+            ':price' => $this->price,
+            ':rate' => $this->rate,
+            ':status' => $this->status,
+            ':categoryId' => $this->category_id,
+            ':brandId' => $this->brand_id,
+            ':typeId' => $this->type_id
+       ]);
+    }
+
     /**
      * Méthode permettant de récupérer un enregistrement de la table Product en fonction d'un id donné
      *

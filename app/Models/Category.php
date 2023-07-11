@@ -260,7 +260,7 @@ class Category extends CoreModel
      *
      * @return bool
      */
-    public function update()
+    public function updateNotSecure()
     {
         // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
@@ -282,4 +282,35 @@ class Category extends CoreModel
         // On retourne VRAI, si au moins une ligne ajoutée
         return ($updatedRows > 0);
     }
+
+
+        /**
+     * Méthode permettant d'ajouter un enregistrement dans la BDD
+     *
+     * @return bool
+     */
+    public function update()
+    {
+        $pdo = Database::getPDO();
+        $sql = "
+            UPDATE `category`
+            SET
+                name = :name,
+                subtitle = :subtitle,
+                picture = :picture,
+                updated_at = NOW()
+            WHERE id = :id
+        ";
+
+        $preparedQuery = $pdo->prepare($sql);
+
+        $preparedQuery->execute([
+            ':name' => $this->name,
+            ':subtitle' => $this->subtitle,
+            ':picture' => $this->picture,
+            ':id' => $this->id
+       ]);
+    }
 }
+
+
