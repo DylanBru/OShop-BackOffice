@@ -68,6 +68,20 @@ class CategoryController extends CoreController
         // dd($_POST);
     }
 
+    public function edit($params)
+    {
+        $modelCategory = new Category;
+        $categoryToEdit = $modelCategory->find($params);
+
+
+        global $router;
+
+        $this->show("category/edit",
+                    [
+                        "categoryToEdit" => $categoryToEdit
+                    ]);
+    }
+
     /**
      * Méthode s'occupant de l'affichage de la liste des catégories
      *
