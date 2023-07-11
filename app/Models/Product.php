@@ -49,6 +49,47 @@ class Product extends CoreModel
      */
     private $type_id;
 
+
+    /**
+     * Méthode permettant d'ajouter un enregistrement dans la BDD
+     *
+     * @return bool
+     */
+    public function update()
+    {
+        $pdo = Database::getPDO();
+        $sql = "
+            UPDATE `product`
+            SET
+                name = :name,
+                description = :description,
+                picture = :picture,
+                price = :price,
+                rate = :rate,
+                status = :status,
+                category_id = :categoryId,
+                brand_id = :brandId,
+                type_id = :typeId,
+                updated_at = NOW()
+            WHERE id = :id
+        ";
+
+        $preparedQuery = $pdo->prepare($sql);
+
+        $preparedQuery->execute([
+            ':id' => $this->id,
+            ':name' => $this->name,
+            ':description' => $this->description,
+            ':picture' => $this->picture,
+            ':price' => $this->price,
+            ':rate' => $this->rate,
+            ':status' => $this->status,
+            ':categoryId' => $this->category_id,
+            ':brandId' => $this->brand_id,
+            ':typeId' => $this->type_id
+       ]);
+    }
+
     /**
      * Méthode permettant de récupérer un enregistrement de la table Product en fonction d'un id donné
      *
@@ -91,6 +132,54 @@ class Product extends CoreModel
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Product');
 
         return $results;
+    }
+
+    /**
+     * Méthode permettant d'ajouter un enregistrement dans la BDD
+     *
+     * @return bool
+     */
+    public function insert() :bool
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Préparation de la requête 
+        $sql = "
+            INSERT INTO `product` (name, description, picture, price, rate, status, category_id, brand_id, type_id)
+            VALUES (:name, :description, :picture, :price, :rate, :status, :categoryId, :brandId, :typeId);
+        ";
+
+        // $preparedQuery est un objet PDOStatement
+        $preparedQuery = $pdo->prepare($sql);
+
+
+        // Execution de la requête d'insertion avec la méthode execute
+        $queryIsSuccessful = $preparedQuery->execute([
+            ':name' => $this->name,
+            ':description' => $this->description,
+            ':picture' => $this->picture,
+            ':price' => $this->price,
+            ':rate' => $this->rate,
+            ':status' => $this->status,
+            ':categoryId' => $this->category_id,
+            ':brandId' => $this->brand_id,
+            ':typeId' => $this->type_id
+       ]);
+
+        // Si au moins une ligne ajoutée
+        // if ($queryIsSuccessful === true) {
+        if ($queryIsSuccessful) {
+            // Alors on récupère l'id auto-incrémenté généré par MySQL
+            $this->id = $pdo->lastInsertId();
+
+            // On retourne VRAI car l'ajout a parfaitement fonctionné
+            return true;
+            // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
+        }
+
+        // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
+        return false;
     }
 
     /**

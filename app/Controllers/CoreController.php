@@ -23,11 +23,13 @@ class CoreController
         $viewData['currentPage'] = $viewName;
 
         // définir l'url absolue pour nos assets
+        // TODO gérer le cas ou on passe par apache
         $viewData['assetsBaseUri'] = $_SERVER['BASE_URI'] . 'assets/';
         // définir l'url absolue pour la racine du site
         // /!\ != racine projet, ici on parle du répertoire public/
         $viewData['baseUri'] = $_SERVER['BASE_URI'];
 
+        
         // On veut désormais accéder aux données de $viewData, mais sans accéder au tableau
         // La fonction extract permet de créer une variable pour chaque élément du tableau passé en argument
         extract($viewData);

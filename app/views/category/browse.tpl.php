@@ -16,9 +16,9 @@
             <tr>
                 <th scope="row"><?= $currentCategory->getId(); ?></th>
                 <td><?= $currentCategory->getName(); ?></td>
-                <td><?= $currentCategory->getSubtitle(); ?></td>
+                <td><?= htmlentities($currentCategory->getSubtitle()); ?></td>
                 <td class="text-end">
-                    <a href="" class="btn btn-sm btn-warning">
+                    <a href="<?= $router->generate('category-edit', ["id" => $currentCategory->getId()]); ?>" class="btn btn-sm btn-warning">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </a>
                     <!-- Example single danger button -->

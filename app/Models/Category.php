@@ -94,6 +94,88 @@ class Category extends CoreModel
     }
 
     /**
+     * Méthode permettant d'ajouter un enregistrement dans la BDD
+     * L'objet courant doit contenir toutes les données à ajouter : 1 propriété => 1 colonne dans la table
+     *
+     * @return bool
+     */
+    public function insertNotSecured() :bool
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête INSERT INTO
+        $sql = "
+            INSERT INTO `category` (name, subtitle, picture)
+            VALUES ('" . $this->name . "', '" . $this->subtitle . "', '" . $this->picture . "');
+        ";
+
+
+        // Execution de la requête d'insertion (exec, pas query)
+        $insertedRows = $pdo->exec($sql);
+
+        // Si au moins une ligne ajoutée
+        if ($insertedRows > 0) {
+            // Alors on récupère l'id auto-incrémenté généré par MySQL
+            $this->id = $pdo->lastInsertId();
+
+            // On retourne VRAI car l'ajout a parfaitement fonctionné
+            return true;
+            // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
+        }
+
+        // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
+        return false;
+    }
+
+    /**
+     * Méthode permettant d'ajouter un enregistrement dans la BDD
+     * L'objet courant doit contenir toutes les données à ajouter : 1 propriété => 1 colonne dans la table
+     *
+     * @return bool
+     */
+    public function insert() :bool
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête INSERT INTO
+        // on prépare des emplacement pour les valeurs à remplacer dans la requête
+        $sql = "
+            INSERT INTO `category` (name, subtitle, picture)
+            VALUES (:name, :subtitle, :emplacement_picture);
+        ";
+
+        // $preparedQuery est un objet PDOStatement
+        $preparedQuery = $pdo->prepare($sql);
+
+
+        // Execution de la requête d'insertion avec la méthode execute
+        // On fournit un tableau qui contient les valeurs à remplacer dans la requête
+        // il est possible de renseigner les valeurs avant de lancer execute 
+        // en utilisant les méthodes qui commencent par bind*
+        $queryIsSuccessful = $preparedQuery->execute([
+            ':name' => $this->name,
+            ':subtitle' => $this->subtitle,
+            ':emplacement_picture' => $this->picture,
+        ]);
+
+        // Si au moins une ligne ajoutée
+        // if ($queryIsSuccessful === true) {
+        if ($queryIsSuccessful) {
+            // Alors on récupère l'id auto-incrémenté généré par MySQL
+            $this->id = $pdo->lastInsertId();
+
+            // On retourne VRAI car l'ajout a parfaitement fonctionné
+            return true;
+            // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
+        }
+
+        // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
+        return false;
+    }
+
+    /**
      * Méthode permettant de récupérer un enregistrement de la table Category en fonction d'un id donné
      *
      * @param int $categoryId ID de la catégorie
@@ -173,18 +255,61 @@ class Category extends CoreModel
     }
 
     /**
-     * Ajouter une catégorie en BDD grâce au formulaire
+     * Méthode permettant de mettre à jour un enregistrement dans la table category
+     * L'objet courant doit contenir l'id, et toutes les données à ajouter : 1 propriété => 1 colonne dans la table
      *
-     * @return void
+     * @return bool
      */
-    public function insert()
+    public function updateNotSecure()
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête UPDATE
+        $sql = "
+            UPDATE `category`
+            SET
+                name = '{$this->name}',
+                subtitle = '{$this->subtitle}',
+                picture = '{$this->picture}',
+                updated_at = NOW()
+            WHERE id = {$this->id}
+        ";
+
+        // Execution de la requête de mise à jour (exec, pas query)
+        $updatedRows = $pdo->exec($sql);
+
+        // On retourne VRAI, si au moins une ligne ajoutée
+        return ($updatedRows > 0);
+    }
+
+
+        /**
+     * Méthode permettant d'ajouter un enregistrement dans la BDD
+     *
+     * @return bool
+     */
+    public function update()
     {
         $pdo = Database::getPDO();
-        $sql = '
-            INSERT INTO category (name, subtitle, picture) 
-            VALUES ( "' . $this->getName() . '" , "' . $this->getSubtitle() . '",  "' .  $this->getPicture() . '")
-        ';
-        $pdo->exec($sql);
+        $sql = "
+            UPDATE `category`
+            SET
+                name = :name,
+                subtitle = :subtitle,
+                picture = :picture,
+                updated_at = NOW()
+            WHERE id = :id
+        ";
+
+        $preparedQuery = $pdo->prepare($sql);
+
+        $preparedQuery->execute([
+            ':name' => $this->name,
+            ':subtitle' => $this->subtitle,
+            ':picture' => $this->picture,
+            ':id' => $this->id
+       ]);
     }
 }
 

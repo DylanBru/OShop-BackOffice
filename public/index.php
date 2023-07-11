@@ -6,9 +6,6 @@
 // inclusion des dépendances via Composer
 // autoload.php permet de charger d'un coup toutes les dépendances installées avec composer
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
-
-use App\Models\Category;
-
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /* ------------
@@ -80,10 +77,30 @@ $router->map(
     'POST',
     '/category/add',
     [
-        'method' => 'getPost',
+        'method' => 'addExecute',
         'controller' => '\App\Controllers\CategoryController'
     ],
-    'category-post'
+    'category-addExecute'
+);
+
+$router->map(
+    'GET',
+    '/category/edit/[i:id]',
+    [
+        'method' => 'edit',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-edit'
+);
+
+$router->map(
+    'POST',
+    '/category/edit/[i:id]',
+    [
+        'method' => 'editExecute',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-editExecute'
 );
 
 /* PRODUCT */ 
@@ -108,6 +125,36 @@ $router->map(
     'product-add'
 );
 
+$router->map(
+    'POST',
+    '/product/add',
+    [
+        'method' => 'addExecute',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-addExecute'
+);
+
+$router->map(
+    'GET',
+    '/product/edit/[i:id]',
+    [
+        'method' => 'edit',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-edit'
+);
+
+$router->map(
+    'POST',
+    '/product/edit/[i:id]',
+    [
+        'method' => 'editExecute',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-editExecute'
+);
+
 /* -------------
 --- DISPATCH ---
 --------------*/
@@ -123,5 +170,3 @@ $match = $router->match();
 $dispatcher = new Dispatcher($match, '\App\Controllers\ErrorController::err404');
 // Une fois le "dispatcher" configuré, on lance le dispatch qui va exécuter la méthode du controller
 $dispatcher->dispatch();
-
-
