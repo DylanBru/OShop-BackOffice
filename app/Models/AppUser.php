@@ -33,6 +33,34 @@ class AppUser extends CoreModel
     private $status;
 
 
+    /**
+     * Méthode permettant de récupérer un enregistrement de la table app_user en fonction de l'email rentré par l'utilisateur
+     *
+     * @param string $email
+     * @return AppUser
+     */
+    public static function findByEmail ($email)
+    {
+        $pdo = Database::getPDO();
+
+        $sql = 'SELECT * 
+                FROM `app_user` 
+                WHERE `email` = :email 
+                ';
+
+        $pdoPrepare = $pdo->prepare($sql);
+
+        $queryIsSuccessful = $pdoPrepare->execute([
+                    ':email' => $email
+                ]);
+        if ($queryIsSuccessful) {
+            $appUser = $pdoPrepare->fetchObject(AppUser::class);
+            return $appUser;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * Méthode permettant de récupérer un enregistrement de la table app_user en fonction d'un id donné
@@ -42,17 +70,17 @@ class AppUser extends CoreModel
      */
     public static function find(int $id)
     {
-    $pdo = Database::getPDO();
+        $pdo = Database::getPDO();
 
-    $sql = 'SELECT * 
-            FROM `app_user` 
-            WHERE `id` =' . $id;
+        $sql = 'SELECT * 
+                FROM `app_user` 
+                WHERE `id` =' . $id;
 
-    $pdoStatement = $pdo->query($sql);
+        $pdoStatement = $pdo->query($sql);
 
-    $appUser = $pdoStatement->fetchObject(AppUser::class);
+        $appUser = $pdoStatement->fetchObject(AppUser::class);
 
-    return $appUser;
+        return $appUser;
     }
     
 

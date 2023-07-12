@@ -179,6 +179,16 @@ $router->map(
     'authentification'
 );
 
+$router->map(
+    'POST',
+    '/authentification',
+    [
+        'method' => 'browseComplete',
+        'controller' => '\App\Controllers\AuthentificationController'
+    ],
+    'authentification-complete'
+);
+
 /* -------------
 --- DISPATCH ---
 --------------*/
