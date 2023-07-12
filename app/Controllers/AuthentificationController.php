@@ -40,7 +40,11 @@ class AuthentificationController extends CoreController
         $appUser = AppUser::findByEmail($email);
         $appUserPasword = $appUser->getPassword();
         if ($password === $appUserPasword) {
-            echo "OK !";
+            // echo "OK !";
+            $_SESSION["userId"] = $appUser->getId();
+            $_SESSION["userObject"] = $appUser;
+            $this->redirectToRoute('main-home');
+            exit;
         } else {
             echo "Quelle mémoire de poisson rouge !";
         }
