@@ -4,6 +4,15 @@
     <h2>Authentification</h2>
 
     <form action="" method="POST" class="mt-5">
+        <?php if (!empty($errorList)) {
+            foreach ($errorList as $error) {
+        ?>
+                <div class="alert alert-danger" role="alert">
+                    <?=$error?>
+                </div>
+        <?php
+            }
+        }?>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="votre e-mail">

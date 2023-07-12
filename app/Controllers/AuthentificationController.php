@@ -21,7 +21,7 @@ class AuthentificationController extends CoreController
     }
 
     /**
-     * Méthode s'occupant de l'affichage de la page d'authentification
+     * Méthode s'occupant de la connection d'un utilisateur
      *
      * @return void
      */
@@ -32,12 +32,20 @@ class AuthentificationController extends CoreController
         $password = filter_input(INPUT_POST, 'password');
 
         // Controle
-        if (!$email) {
-            exit("E-mail erroné");
-        }
+        $errorList = [];
+
 
         // Vérification des accès
         $appUser = AppUser::findByEmail($email);
+
+        if (!$appUser) {
+            $errorList[] = "E-mail erroné";
+            $this->show('authentification/browse', [
+                'errorList' => $errorList
+            ]);
+            exit;
+        }
+
         $appUserPasword = $appUser->getPassword();
         if ($password === $appUserPasword) {
             // echo "OK !";
@@ -46,7 +54,11 @@ class AuthentificationController extends CoreController
             $this->redirectToRoute('main-home');
             exit;
         } else {
-            echo "Quelle mémoire de poisson rouge !";
+            $errorList[] = "Ceci n'est pas le bon mot de passe";
+            $this->show('authentification/browse', [
+                'errorList' => $errorList
+            ]);
+            exit;
         }
     }
 }
