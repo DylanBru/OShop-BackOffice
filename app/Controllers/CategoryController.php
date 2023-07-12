@@ -18,7 +18,6 @@ class CategoryController extends CoreController
         // On appelle la méthode show() de l'objet courant
         $this->show('category/add');
     }
-    
 
     /**
      * Traite le formulaire d'ajout
@@ -50,58 +49,22 @@ class CategoryController extends CoreController
 
         // on crée un modèle 
         $categoryToInsert = new Category();
-        
+
         // que l'on rempli ( on l'hydrate ) avec les données saisies par l'utilisateur
         $categoryToInsert->setName($name);
         $categoryToInsert->setSubtitle($subtitle);
         $categoryToInsert->setPicture($picture);
-        
+
         // on lance la requête d'insertion
         $categoryToInsert->insert();
 
-        // TODO se débarasser de ce global !!!!
         global $router;
         // une fois le formulaire traité on redirige l'utilisateur
-        header('Location: ' . $router->generate('category-browse'));
+        $this->redirectToRoute('category-browse');
 
         exit;
         // dump($categoryToInsert);
         // dd($_POST);
-    }
-
-    public function edit($params)
-    {
-        $modelCategory = new Category;
-        $categoryToEdit = $modelCategory->find($params);
-
-
-        global $router;
-
-        $this->show("category/edit",
-                    [
-                        "categoryToEdit" => $categoryToEdit
-                    ]);
-    }
-
-    public function editExecute($params)
-    {
-        $name = filter_input(INPUT_POST, 'name');
-        $subtitle = filter_input(INPUT_POST, 'subtitle');
-        $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
-
-        $modelCategory = new Category;
-        $categoryToEdit = $modelCategory->find($params);
-
-        $categoryToEdit->setName($name);
-        $categoryToEdit->setSubtitle($subtitle);
-        $categoryToEdit->setPicture($picture);
-
-        $categoryToEdit->update();
-
-        global $router;
-        header('Location: ' . $router->generate('category-browse'));
-
-        exit;
     }
 
     /**
@@ -119,5 +82,82 @@ class CategoryController extends CoreController
         $this->show('category/browse', [
             'categoryList' => $allCategoryList
         ]);
+    }
+
+    /**
+     * Méthode s'occupant de l'affichage du formulaire de mise à jour
+     *
+     * @param int $id
+     * @return void
+     */
+    public function edit(int $id)
+    {
+        // préparation des données
+        $category = Category::find($id);
+
+        // affichage de la vue
+        $this->show('category/edit', [
+            'category' => $category,
+        ]);
+    }
+
+    /**
+     * Méthode s'occupant du traitement du formulaire de mise à jour
+     *
+     * @param int $id
+     * @return void
+     */
+    public function editExecute(int $id)
+    {
+        // 1 - récupérer les données
+        $name = filter_input(INPUT_POST, 'name');
+        $subtitle = filter_input(INPUT_POST, 'subtitle');
+        $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+
+        // 2 - valider / nettoyer les données
+        if (strlen($name) === 0)
+        {
+            // die arrête l'exécution du code
+            // on gérera les erreurs plus tard
+            die('Nom manquant');
+        }
+        if ($picture === false)
+        {
+            die('L\'image doit etre une url complète');
+        }
+
+        // 3 - traiter le formulaire
+
+        // on récupère l'objet de la BDD
+        $categoryToUpdate = Category::find($id);
+
+        // puis on le rempli ( on l'hydrate ) avec les données saisies par l'utilisateur
+        $categoryToUpdate->setName($name);
+        $categoryToUpdate->setSubtitle($subtitle);
+        $categoryToUpdate->setPicture($picture);
+
+        // et on le sauvegarde en BDD
+        $categoryToUpdate->save();
+
+        // 4 - rediriger l'utilisateur
+        $this->redirectToRoute('category-browse');
+
+    }
+
+    /**
+     * supprime un enregistrement en BDD
+     *
+     * @return void
+     */
+    public function delete($id)
+    {
+        Category::delete($id);
+
+        $this->redirectToRoute('category-browse');
+    }
+
+    public function demoAbstract()
+    {
+        
     }
 }

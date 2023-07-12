@@ -59,6 +59,16 @@ class Type extends CoreModel
         return $results;
     }
 
+    public function insert()
+    {
+        die('A implémenter');
+    }
+
+    public function update()
+    {
+        die('A implémenter');        
+    }
+    
     /**
      * Get the value of name
      *

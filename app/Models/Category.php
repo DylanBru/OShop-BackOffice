@@ -93,6 +93,26 @@ class Category extends CoreModel
         $this->home_order = $home_order;
     }
 
+    public static function delete($id) 
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        $sql = "
+            DELETE FROM `category` WHERE id = :id;
+        ";
+
+        // $preparedQuery est un objet PDOStatement
+        $preparedQuery = $pdo->prepare($sql);
+
+        $queryIsSuccessful = $preparedQuery->execute([
+            ':id' => $id,
+        ]);
+
+        return $queryIsSuccessful;
+
+    }
+
     /**
      * Méthode permettant d'ajouter un enregistrement dans la BDD
      * L'objet courant doit contenir toutes les données à ajouter : 1 propriété => 1 colonne dans la table
@@ -215,6 +235,54 @@ class Category extends CoreModel
     }
 
     /**
+     * Mets à jour l'enregistrement en BDD
+     *
+     * @return void
+     */
+    public function update()
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête INSERT INTO
+        // on prépare des emplacement pour les valeurs à remplacer dans la requête
+        $sql = "
+            UPDATE `category` 
+            SET
+                name = :name, 
+                subtitle = :subtitle, 
+                picture = :picture,
+                home_order = :home_order,
+                updated_at = now()
+            WHERE id = :id
+        ";
+
+        // $preparedQuery est un objet PDOStatement
+        $preparedQuery = $pdo->prepare($sql);
+
+
+        // Execution de la requête d'insertion avec la méthode execute
+        // exemple avec bindValue
+        $preparedQuery->bindValue(':id', $this->id);
+        $preparedQuery->bindValue(':name', $this->name);
+        $preparedQuery->bindValue(':subtitle', $this->subtitle);
+        $preparedQuery->bindValue(':picture', $this->picture);
+        $preparedQuery->bindParam(':home_order', $this->home_order);
+        
+        /*
+            différence entre bindValue et bindParam
+
+            Avec bindValue, le remplacement dans la requete se fait au moment du bind
+            Avec bindParam, le remplacement dans la requete se fait au moment du execute
+        */
+
+        $queryIsSuccessful = $preparedQuery->execute();
+
+
+        return $queryIsSuccessful;
+    }
+
+    /**
      * Récupérer les 3 catégories à afficher sur la home du backoffice
      *
      * @return Category[]
@@ -253,64 +321,4 @@ class Category extends CoreModel
 
         return $categories;
     }
-
-    /**
-     * Méthode permettant de mettre à jour un enregistrement dans la table category
-     * L'objet courant doit contenir l'id, et toutes les données à ajouter : 1 propriété => 1 colonne dans la table
-     *
-     * @return bool
-     */
-    public function updateNotSecure()
-    {
-        // Récupération de l'objet PDO représentant la connexion à la DB
-        $pdo = Database::getPDO();
-
-        // Ecriture de la requête UPDATE
-        $sql = "
-            UPDATE `category`
-            SET
-                name = '{$this->name}',
-                subtitle = '{$this->subtitle}',
-                picture = '{$this->picture}',
-                updated_at = NOW()
-            WHERE id = {$this->id}
-        ";
-
-        // Execution de la requête de mise à jour (exec, pas query)
-        $updatedRows = $pdo->exec($sql);
-
-        // On retourne VRAI, si au moins une ligne ajoutée
-        return ($updatedRows > 0);
-    }
-
-
-        /**
-     * Méthode permettant d'ajouter un enregistrement dans la BDD
-     *
-     * @return bool
-     */
-    public function update()
-    {
-        $pdo = Database::getPDO();
-        $sql = "
-            UPDATE `category`
-            SET
-                name = :name,
-                subtitle = :subtitle,
-                picture = :picture,
-                updated_at = NOW()
-            WHERE id = :id
-        ";
-
-        $preparedQuery = $pdo->prepare($sql);
-
-        $preparedQuery->execute([
-            ':name' => $this->name,
-            ':subtitle' => $this->subtitle,
-            ':picture' => $this->picture,
-            ':id' => $this->id
-       ]);
-    }
 }
-
-

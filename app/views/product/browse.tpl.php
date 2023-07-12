@@ -12,13 +12,13 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach($productList as $currentProduct) : ?>
+            <?php foreach($productList as $currrentProduct) : ?>
             <tr>
-                <th scope="row"><?= $currentProduct->getId(); ?></th>
-                <td><?= $currentProduct->getName(); ?></td>
-                <td><?= $currentProduct->getPrice(); ?>€</td>
+                <th scope="row"><?= $currrentProduct->getId(); ?></th>
+                <td><?= $currrentProduct->getName(); ?></td>
+                <td><?= $currrentProduct->getPrice(); ?>€</td>
                 <td class="text-end">
-                    <a href="<?= $router->generate('product-edit', ["id" => $currentProduct->getId()]); ?>" class="btn btn-sm btn-warning">
+                    <a href="" class="btn btn-sm btn-warning">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </a>
                     <!-- Example single danger button -->
