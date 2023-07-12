@@ -53,5 +53,4 @@ abstract class CoreController
 
         exit;
     }
-    abstract function demoAbstract();
 }
