@@ -49,47 +49,6 @@ class Product extends CoreModel
      */
     private $type_id;
 
-
-    /**
-     * Méthode permettant d'ajouter un enregistrement dans la BDD
-     *
-     * @return bool
-     */
-    public function update()
-    {
-        $pdo = Database::getPDO();
-        $sql = "
-            UPDATE `product`
-            SET
-                name = :name,
-                description = :description,
-                picture = :picture,
-                price = :price,
-                rate = :rate,
-                status = :status,
-                category_id = :categoryId,
-                brand_id = :brandId,
-                type_id = :typeId,
-                updated_at = NOW()
-            WHERE id = :id
-        ";
-
-        $preparedQuery = $pdo->prepare($sql);
-
-        $preparedQuery->execute([
-            ':id' => $this->id,
-            ':name' => $this->name,
-            ':description' => $this->description,
-            ':picture' => $this->picture,
-            ':price' => $this->price,
-            ':rate' => $this->rate,
-            ':status' => $this->status,
-            ':categoryId' => $this->category_id,
-            ':brandId' => $this->brand_id,
-            ':typeId' => $this->type_id
-       ]);
-    }
-
     /**
      * Méthode permettant de récupérer un enregistrement de la table Product en fonction d'un id donné
      *
@@ -180,6 +139,49 @@ class Product extends CoreModel
 
         // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
         return false;
+    }
+
+    public function update()
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Préparation de la requête 
+        $sql = "
+            UPDATE `product` 
+            SET
+                name = :name,
+                description = :description,
+                picture = :picture,
+                price = :price,
+                rate = :rate,
+                status = :status,
+                category_id = :category_id,
+                brand_id = :brand_id,
+                type_id = :type_id,
+                updated_at = now()
+            WHERE id = :id;
+        ";
+
+        // $preparedQuery est un objet PDOStatement
+        $preparedQuery = $pdo->prepare($sql);
+
+
+        // Execution de la requête d'insertion avec la méthode execute
+        $queryIsSuccessful = $preparedQuery->execute([
+            ':name' => $this->name,
+            ':description' => $this->description,
+            ':picture' => $this->picture,
+            ':price' => $this->price,
+            ':rate' => $this->rate,
+            ':status' => $this->status,
+            ':category_id' => $this->category_id,
+            ':brand_id' => $this->brand_id,
+            ':type_id' => $this->type_id,
+            ':id' => $this->id,
+       ]);
+
+        return $queryIsSuccessful;
     }
 
     /**

@@ -18,7 +18,7 @@
                 <td><?= $currentCategory->getName(); ?></td>
                 <td><?= htmlentities($currentCategory->getSubtitle()); ?></td>
                 <td class="text-end">
-                    <a href="<?= $router->generate('category-edit', ["id" => $currentCategory->getId()]); ?>" class="btn btn-sm btn-warning">
+                    <a href="<?= $router->generate('category-edit', ['id' => $currentCategory->getId()]); ?>" class="btn btn-sm btn-warning">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </a>
                     <!-- Example single danger button -->
@@ -28,7 +28,7 @@
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Oui, je veux supprimer</a>
+                            <a class="dropdown-item" href="<?= $router->generate('category-delete', ['id' => $currentCategory->getId()]); ?>">Oui, je veux supprimer</a>
                             <a class="dropdown-item" href="#" data-toggle="dropdown">Oups !</a>
                         </div>
                     </div>

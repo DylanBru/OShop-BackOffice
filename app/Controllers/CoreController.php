@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class CoreController
+abstract class CoreController
 {
     /**
      * Méthode permettant d'afficher du code HTML en se basant sur les views
@@ -42,5 +42,15 @@ class CoreController
         require_once __DIR__ . '/../views/layout/header.tpl.php';
         require_once __DIR__ . '/../views/' . $viewName . '.tpl.php';
         require_once __DIR__ . '/../views/layout/footer.tpl.php';
+    }
+
+    public function redirectToRoute($routeName)
+    {
+        // TODO se débarasser de ce global !!!!
+        global $router;
+        // une fois le formulaire traité on redirige l'utilisateur
+        header('Location: ' . $router->generate($routeName));
+
+        exit;
     }
 }

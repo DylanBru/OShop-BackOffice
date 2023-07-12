@@ -8,6 +8,10 @@
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// on démarre la session
+// cela nous permettra d'utiliser le tableau $_SESSION
+
+session_start();
 /* ------------
 --- ROUTAGE ---
 -------------*/
@@ -99,8 +103,17 @@ $router->map(
     [
         'method' => 'editExecute',
         'controller' => '\App\Controllers\CategoryController'
+    ]
+);
+
+$router->map(
+    'GET',
+    '/category/delete/[i:id]',
+    [
+        'method' => 'delete',
+        'controller' => '\App\Controllers\CategoryController'
     ],
-    'category-editExecute'
+    'category-delete'
 );
 
 /* PRODUCT */ 
@@ -151,8 +164,29 @@ $router->map(
     [
         'method' => 'editExecute',
         'controller' => '\App\Controllers\ProductController'
+    ]
+);
+
+/* AUTHENTIFICATION */ 
+
+$router->map(
+    'GET',
+    '/authentification',
+    [
+        'method' => 'browse',
+        'controller' => '\App\Controllers\AuthentificationController'
     ],
-    'product-editExecute'
+    'authentification'
+);
+
+$router->map(
+    'POST',
+    '/authentification',
+    [
+        'method' => 'browseComplete',
+        'controller' => '\App\Controllers\AuthentificationController'
+    ],
+    'authentification-complete'
 );
 
 /* -------------

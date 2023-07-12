@@ -87,65 +87,9 @@ class ProductController extends CoreController
             die();
         }
 
-        // TODO se débarasser de ce global !!!!
-        global $router;
         // une fois le formulaire traité on redirige l'utilisateur
-        header('Location: ' . $router->generate('product-browse'));
+        $this->redirectToRoute('product-browse');
 
-        exit;
-    }
-
-    public function edit($params)
-    {
-        $modelProduct = new Product;
-        $allCategoryList = Category::findAll();
-        $allBrandList = Brand::findAll();
-        $allTypeList = Type::findAll();
-        $productToEdit = $modelProduct->find($params);
-
-
-        global $router;
-
-        $this->show("product/edit",
-                    [
-                        "productToEdit" => $productToEdit,
-                        "allCategoryList" => $allCategoryList,
-                        "allBrandList" => $allBrandList,
-                        "allTypeList" => $allTypeList
-                    ]);
-    }
-
-    public function editExecute($params)
-    {
-        $name = filter_input(INPUT_POST, 'name');
-        $description = filter_input(INPUT_POST, 'description');
-        $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
-        $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
-        $rate = filter_input(INPUT_POST, 'rate', FILTER_VALIDATE_INT);
-        $status = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT);
-        $categoryId = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
-        $brandId = filter_input(INPUT_POST, 'brand_id', FILTER_VALIDATE_INT);
-        $typeId = filter_input(INPUT_POST, 'type_id', FILTER_VALIDATE_INT);
-
-        $modelProduct = new Product;
-        $productToEdit = $modelProduct->find($params);
-
-        $productToEdit->setName($name);
-        $productToEdit->setDescription($description);
-        $productToEdit->setPicture($picture);
-        $productToEdit->setPrice($price);
-        $productToEdit->setRate($rate);
-        $productToEdit->setStatus($status);
-        $productToEdit->setCategoryId($categoryId);
-        $productToEdit->setBrandId($brandId);
-        $productToEdit->setTypeId($typeId);
-
-        $productToEdit->update();
-
-        global $router;
-        header('Location: ' . $router->generate('product-browse'));
-
-        exit;
     }
 
     /**
@@ -163,4 +107,66 @@ class ProductController extends CoreController
             'productList' => $allProductList,
         ]);
     }
+
+    public function edit($id)
+    {
+        $product = Product::find($id);
+        $allCategoryList = Category::findAll();
+        $allBrandList = Brand::findAll();
+        $allTypeList = Type::findAll();
+
+        $this->show('product/edit', [
+            'product' => $product,
+            'allCategoryList' => $allCategoryList,
+            'allBrandList' => $allBrandList,
+            'allTypeList' => $allTypeList,
+        ]);
+    }
+
+    public function editExecute($id)
+    {
+        // récupérer les données
+        $name = filter_input(INPUT_POST, 'name');
+        $description = filter_input(INPUT_POST, 'description');
+        $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+        $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
+        $rate = filter_input(INPUT_POST, 'rate', FILTER_VALIDATE_INT);
+        $status = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT);
+        $categoryId = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
+        $brandId = filter_input(INPUT_POST, 'brand_id', FILTER_VALIDATE_INT);
+        $typeId = filter_input(INPUT_POST, 'type_id', FILTER_VALIDATE_INT);
+
+        // NTUI ( nettoyage / validation des données )
+        // TODO traiter les erreurs
+
+        // traiter le formulaire
+        // dans ce cas update en BDD
+
+        // on crée un modèle 
+        $objectToUpdate = Product::find($id);
+
+        // que l'on rempli ( on l'hydrate ) avec les données saisies par l'utilisateur
+        $objectToUpdate->setName($name);
+        $objectToUpdate->setDescription($description);
+        $objectToUpdate->setPicture($picture);
+        $objectToUpdate->setPrice($price);
+        $objectToUpdate->setRate($rate);
+        $objectToUpdate->setStatus($status);
+        $objectToUpdate->setCategoryId($categoryId);
+        $objectToUpdate->setBrandId($brandId);
+        $objectToUpdate->setTypeId($typeId);
+
+        // on lance la requête d'insertion
+        // si une erreur est survenue, on ne fait pas de redirection 
+        // pour que l'on puisse avoir le message d'erreur
+        if (! $objectToUpdate->save())
+        {
+            die();
+        }
+
+        // une fois le formulaire traité on redirige l'utilisateur
+        $this->redirectToRoute('product-browse');
+    }
+
+    function demoAbstract(){}
 }
