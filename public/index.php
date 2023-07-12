@@ -167,6 +167,18 @@ $router->map(
     ]
 );
 
+/* AUTHENTIFICATION */ 
+
+$router->map(
+    'GET',
+    '/authentification',
+    [
+        'method' => 'browse',
+        'controller' => '\App\Controllers\AuthentificationController'
+    ],
+    'authentification'
+);
+
 /* -------------
 --- DISPATCH ---
 --------------*/
