@@ -3,198 +3,104 @@
 namespace App\Models;
 
 use App\Utils\Database;
-use PDO;
 
 class AppUser extends CoreModel
 {
-    /**
-     * @var string
-     */
     private $email;
-    /**
-     * @var mixed
-     */
     private $password;
-    /**
-     * @var string
-     */
     private $firstname;
-    /**
-     * @var string
-     */
     private $lastname;
-    /**
-     * @var string
-     */
     private $role;
-    /**
-     * @var int
-     */
     private $status;
-
-
-    /**
-     * Méthode permettant de récupérer un enregistrement de la table app_user en fonction de l'email rentré par l'utilisateur
-     *
-     * @param string $email
-     * @return AppUser
-     */
-    public static function findByEmail ($email)
-    {
-        $pdo = Database::getPDO();
-
-        $sql = 'SELECT * 
-                FROM `app_user` 
-                WHERE `email` = :email 
-                ';
-
-        $pdoPrepare = $pdo->prepare($sql);
-
-        $queryIsSuccessful = $pdoPrepare->execute([
-                    ':email' => $email
-                ]);
-        if ($queryIsSuccessful) {
-            $appUser = $pdoPrepare->fetchObject(AppUser::class);
-            return $appUser;
-        } else {
-            return false;
-        }
-    }
-
-
-    /**
-     * Méthode permettant de récupérer un enregistrement de la table app_user en fonction d'un id donné
-     *
-     * @param int $id
-     * @return AppUser
-     */
-    public static function find(int $id)
-    {
-        $pdo = Database::getPDO();
-
-        $sql = 'SELECT * 
-                FROM `app_user` 
-                WHERE `id` =' . $id;
-
-        $pdoStatement = $pdo->query($sql);
-
-        $appUser = $pdoStatement->fetchObject(AppUser::class);
-
-        return $appUser;
-    }
     
 
+    // actuellement, aucune méthode du Model AppUser ne permet une recherche par email
+    // coder la méthode statique findByEmail($email)
+    // si on trouve un résultat pour l'email, retourner une instance de AppUser
+    // sinon, retourner false
+    
     /**
-     * Méthode permettant de récupérer tous les enregistrements de la table app_user
+     * Recherche un utilisateur par son email
      *
-     * @return AppUser[]
+     * @param string $email
+     * @return AppUser|boolean
      */
-    public static function findAll()
+    public static function findByEmail(string $email)
     {
-        $pdo = Database::getPDO();
-        $sql = 'SELECT * FROM `app_user`';
-        $pdoStatement = $pdo->query($sql);
-        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, AppUser::class);
-
-        return $results;
-    }
-
-
-    /**
-     * Méthode permettant d'ajouter un enregistrement dans la BDD
-     * L'objet courant doit contenir toutes les données à ajouter : 1 propriété => 1 colonne dans la table
-     *
-     * @return bool
-     */
-    public function insert() :bool
-    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
 
+        // Ecriture de la requête INSERT INTO
         $sql = "
-            INSERT INTO `app_user` (email, password, firstname, lastname, role, status, created_at)
-            VALUES (:name, :subtitle, :emplacement_picture);
+            SELECT * FROM `app_user`
+            WHERE email = :email;
         ";
 
+        // Préparation de la requête
         $preparedQuery = $pdo->prepare($sql);
 
-        $queryIsSuccessful = $preparedQuery->execute([
-            ':email' => $this->email,
-            ':password' => $this->password,
-            ':firstname' => $this->firstname,
-            ':lastname' => $this->lastname,
-            ':role' => $this->role,
-            ':status' => $this->status,
-        ]);
+        $preparedQuery->execute([':email' => $email]);
 
-        if ($queryIsSuccessful) {
-            $this->id = $pdo->lastInsertId();
+        // un seul résultat => fetchObject
+        // __CLASS__ et self::class contiennent le FQCN de la classe actuelle;
+        $appUser = $preparedQuery->fetchObject(self::class);
 
-            return true;
-        }
+        // retourner le résultat
+        return $appUser;
 
-        return false;
+    } 
+
+    public static function find(int $id)
+    {
+
+    } 
+    public static function findAll()
+    {
+
+    }
+    public function insert()
+    {
+
+    }
+    public function update()
+    {
+
     }
 
 
     /**
-     * Mets à jour l'enregistrement en BDD
-     *
-     * @return void
-     */
-    public function update()
-    {
-        $pdo = Database::getPDO();
-
-        $sql = "
-            UPDATE `category` 
-            SET
-                email = :email, 
-                password = :password, 
-                firstname = :firstname,
-                lastname = :lastname,
-                role = :role,
-                status = :status
-                updated_at = now()
-            WHERE id = :id
-            ";
-
-        $preparedQuery = $pdo->prepare($sql);
-
-        $queryIsSuccessful = $preparedQuery->execute([
-            ':id' => $this->id,
-            ':email' => $this->email,
-            ':password' => $this->password,
-            ':firstname' => $this->firstname,
-            ':lastname' => $this->lastname,
-            ':role' => $this->role,
-            ':status' => $this->status,
-        ]);
-
-        return $queryIsSuccessful;
-    }
-
-
-
-    // Getter and Setter
-
+     * Get the value of email
+     */ 
     public function getEmail()
     {
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    /**
+     * Set the value of email
+     *
+     * @return  self
+     */ 
+    public function setEmail($email)
     {
         $this->email = $email;
 
         return $this;
-
     }
 
+    /**
+     * Get the value of password
+     */ 
     public function getPassword()
     {
         return $this->password;
     }
 
+    /**
+     * Set the value of password
+     *
+     * @return  self
+     */ 
     public function setPassword($password)
     {
         $this->password = $password;
@@ -202,56 +108,83 @@ class AppUser extends CoreModel
         return $this;
     }
 
-
+    /**
+     * Get the value of firstname
+     */ 
     public function getFirstname()
     {
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname)
+    /**
+     * Set the value of firstname
+     *
+     * @return  self
+     */ 
+    public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
 
         return $this;
     }
 
-
+    /**
+     * Get the value of lastname
+     */ 
     public function getLastname()
     {
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname)
+    /**
+     * Set the value of lastname
+     *
+     * @return  self
+     */ 
+    public function setLastname($lastname)
     {
         $this->lastname = $lastname;
 
         return $this;
     }
 
-
+    /**
+     * Get the value of role
+     */ 
     public function getRole()
     {
         return $this->role;
     }
 
-    public function setRole(string $role)
+    /**
+     * Set the value of role
+     *
+     * @return  self
+     */ 
+    public function setRole($role)
     {
         $this->role = $role;
 
         return $this;
     }
 
-
+    /**
+     * Get the value of status
+     */ 
     public function getStatus()
     {
         return $this->status;
     }
 
-    public function setStatus(int $status)
+    /**
+     * Set the value of status
+     *
+     * @return  self
+     */ 
+    public function setStatus($status)
     {
         $this->status = $status;
 
         return $this;
     }
-
 }

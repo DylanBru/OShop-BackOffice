@@ -45,6 +45,8 @@ if (array_key_exists('BASE_URI', $_SERVER)) {
 //      - "NomDuController-NomDeLaMéthode"
 //      - ainsi pour la route /, méthode "home" du MainController => "main-home"
 
+/* MAIN */
+
 $router->map(
     'GET',
     '/',
@@ -55,6 +57,35 @@ $router->map(
     'main-home'
 );
 
+$router->map(
+    'GET',
+    '/login',
+    [
+        'method' => 'login',
+        'controller' => '\App\Controllers\MainController' 
+    ],
+    'main-login'
+);
+
+$router->map(
+    'POST',
+    '/login',
+    [
+        'method' => 'loginExecute',
+        'controller' => '\App\Controllers\MainController' 
+    ],
+    'main-loginExecute'
+);
+
+$router->map(
+    'GET',
+    '/logout',
+    [
+        'method' => 'logout',
+        'controller' => '\App\Controllers\MainController' 
+    ],
+    'main-logout'
+);
 /* CATEGORY */ 
 
 $router->map(
@@ -62,7 +93,7 @@ $router->map(
     '/category',
     [
         'method' => 'browse',
-        'controller' => '\App\Controllers\CategoryController' // On indique le FQCN de la classe
+        'controller' => '\App\Controllers\CategoryController' 
     ],
     'category-browse'
 );
@@ -165,28 +196,6 @@ $router->map(
         'method' => 'editExecute',
         'controller' => '\App\Controllers\ProductController'
     ]
-);
-
-/* AUTHENTIFICATION */ 
-
-$router->map(
-    'GET',
-    '/authentification',
-    [
-        'method' => 'browse',
-        'controller' => '\App\Controllers\AuthentificationController'
-    ],
-    'authentification'
-);
-
-$router->map(
-    'POST',
-    '/authentification',
-    [
-        'method' => 'browseComplete',
-        'controller' => '\App\Controllers\AuthentificationController'
-    ],
-    'authentification-complete'
 );
 
 /* -------------

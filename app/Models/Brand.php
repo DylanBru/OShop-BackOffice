@@ -32,6 +32,7 @@ class Brand extends CoreModel
         $pdo = Database::getPDO();
 
         // écrire notre requête
+        // TODO utiliser prepare partout ou $pdo->query() est utilisé
         $sql = '
             SELECT *
             FROM brand
