@@ -16,7 +16,7 @@
             <?php foreach($allUserList as $currentUser) : ?>
             <tr>
                 <th scope="row"><?= $currentUser->getId(); ?></th>
-                <td><?= $currentUser->getLastname(); ?></td>
+                <td><?= htmlentities($currentUser->getLastname()); ?></td>
                 <td><?= htmlentities($currentUser->getFirstname()); ?></td>
                 <td><?= htmlentities($currentUser->getRole()); ?></td>
                 <td class="text-end">
