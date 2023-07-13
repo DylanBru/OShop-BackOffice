@@ -30,7 +30,7 @@ class UserController extends CoreController
         $userToInsert->setLastname($lastname);
         $userToInsert->setFirstname($firstname);
         $userToInsert->setEmail($email);
-        $userToInsert->setPassword($password);
+        $userToInsert->setPassword(password_hash($password, PASSWORD_DEFAULT));
         $userToInsert->setRole($role);
         $userToInsert->setStatus($status);
 
