@@ -13,6 +13,7 @@ class CategoryController extends CoreController
      */
     public function add()
     {
+        $this->checkAuthorization(['admin']);
         // Préparer les données ( = en général les récupérer depuis la BDD )
 
         // On appelle la méthode show() de l'objet courant
