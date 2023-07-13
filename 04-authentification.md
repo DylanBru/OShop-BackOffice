@@ -1,6 +1,6 @@
 # Authentification
 
-```
+```raw
 USER: email, password, firstname, lastname, status, role
 ```
 

@@ -19,3 +19,6 @@
 | `/product/add` | `GET` | `ProductController` | `add` | Ajout d'un produit | shows add form of a product | - |
 | `/product/add` | `POST` | `ProductController` | `addExecute` | - | insert one product in DB | - |
 | `/product/delete/[i:id]` | `GET` | `ProductController` | `delete` | - | delete one product | id = product ID in DB |
+| `/login` | `GET` | `MainController` | `login` | Log in | display the login form | - |
+| `/login` | `POST` | `MainController` | `loginExecute` | - | log in the user | - |
+| `/logout` | `GET` | `MainController` | `logout` | - | log out the user | - |
