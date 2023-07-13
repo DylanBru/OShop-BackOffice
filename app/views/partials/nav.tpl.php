@@ -32,6 +32,9 @@
                     <a class="nav-link" href="#">Sélection Accueil</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="<?= $router->generate('user-browse'); ?>">Utilisateurs</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link btn btn-danger text-light" href="<?= $router->generate('main-logout'); ?>">Déconnexion</a>
                 </li>
                 <li class="nav-item nav-link text-light">( <?= $_SESSION['user_object']->getEmail(); ?> ) </li>

@@ -198,6 +198,68 @@ $router->map(
     ]
 );
 
+/* USERS */ 
+
+$router->map(
+    'GET',
+    '/user',
+    [
+        'method' => 'browse',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-browse'
+);
+
+$router->map(
+    'GET',
+    '/user/add',
+    [
+        'method' => 'add',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-add'
+);
+
+$router->map(
+    'POST',
+    '/user/add',
+    [
+        'method' => 'addExecute',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-addExecute'
+);
+
+$router->map(
+    'GET',
+    '/user/edit/[i:id]',
+    [
+        'method' => 'edit',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-edit'
+);
+
+$router->map(
+    'POST',
+    '/user/edit/[i:id]',
+    [
+        'method' => 'editExecute',
+        'controller' => '\App\Controllers\UserController'
+    ]
+);
+
+$router->map(
+    'GET',
+    '/user/delete/[i:id]',
+    [
+        'method' => 'delete',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-delete'
+);
+
+
 /* -------------
 --- DISPATCH ---
 --------------*/
