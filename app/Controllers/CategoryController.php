@@ -6,6 +6,14 @@ use App\Models\Category;
 
 class CategoryController extends CoreController
 {
+    public function homeEdit()
+    {
+        $CategoryListForHomePage = Category::findAllHomepage();
+        $this->show('category/home', [
+            'CategoryListForHomePage' => $CategoryListForHomePage
+        ]);    
+    }
+
     /**
      * Méthode s'occupant de l'affichage du formulaire d'ajout
      *

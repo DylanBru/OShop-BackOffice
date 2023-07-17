@@ -31,7 +31,7 @@
                     <a class="nav-link" href="#">Tags</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sélection Accueil</a>
+                    <a class="nav-link" href="<?=$router->generate('category-homeEdit')?>">Sélection Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link btn btn-danger text-light" href="<?= $router->generate('main-logout'); ?>">Déconnexion</a>

@@ -152,6 +152,27 @@ $router->map(
     'category-delete'
 );
 
+$router->map(
+    'GET',
+    '/category/home',
+    [
+        'method' => 'homeEdit',
+        'controller' => 'CategoryController'
+    ],
+    'category-homeEdit'
+);
+
+$router->map(
+    'POST',
+    '/category/home',
+    [
+        'method' => 'homeEditExecute',
+        'controller' => 'CategoryController'
+    ],
+    'category-homeEditExecute'
+);
+
+
 /* PRODUCT */ 
 
 $router->map(

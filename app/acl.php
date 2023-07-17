@@ -8,6 +8,7 @@
         'category-add' => ['admin', 'catalog-manager'],
         'category-addExecute' => ['admin', 'catalog-manager'],
         'category-delete' => ['admin', 'catalog-manager'],
+        'category-homeEdit' => ['admin', 'catalog-manager'],
         'product-browse' => ['admin', 'catalog-manager'],
         'product-read' => ['admin', 'catalog-manager'],
         'product-edit' => ['admin', 'catalog-manager'],
