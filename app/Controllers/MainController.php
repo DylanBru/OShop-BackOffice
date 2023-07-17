@@ -59,7 +59,14 @@ class MainController extends CoreController
 
         $errorList = [];
 
-        if ($userInDB === false || $password !== $userInDB->getPassword())
+        if ($userInDB === false)
+        {
+            $errorList[] = 'Identifiant ou mot de passe incorrect';
+            $this->show('main/login', ['errorList' => $errorList]);
+            die();
+        }
+        $passwordIsCorrect = password_verify($password, $userInDB->getPassword());
+        if ($passwordIsCorrect === false)
         {
             $errorList[] = 'Identifiant ou mot de passe incorrect';
             $this->show('main/login', ['errorList' => $errorList]);

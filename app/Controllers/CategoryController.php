@@ -6,6 +6,25 @@ use App\Models\Category;
 
 class CategoryController extends CoreController
 {
+    public function homeEditExecute()
+    {
+        foreach ($_POST["emplacement"] as $home_order => $categoryId) {
+            $categoryToUpdate = Category::find($categoryId);
+            $categoryToUpdate->setHomeOrder($home_order+1);
+            $categoryToUpdate->save();
+        }
+        $this->redirectToRoute('category-homeEdit');
+
+    }
+
+    public function homeEdit()
+    {
+        $CategoryListForHomePage = Category::findAllHomepage();
+        $this->show('category/home', [
+            'CategoryListForHomePage' => $CategoryListForHomePage
+        ]);    
+    }
+
     /**
      * Méthode s'occupant de l'affichage du formulaire d'ajout
      *
@@ -13,7 +32,6 @@ class CategoryController extends CoreController
      */
     public function add()
     {
-        $this->checkAuthorization(['admin']);
         // Préparer les données ( = en général les récupérer depuis la BDD )
 
         // On appelle la méthode show() de l'objet courant
@@ -59,7 +77,6 @@ class CategoryController extends CoreController
         // on lance la requête d'insertion
         $categoryToInsert->insert();
 
-        global $router;
         // une fois le formulaire traité on redirige l'utilisateur
         $this->redirectToRoute('category-browse');
 

@@ -6,6 +6,9 @@
 // inclusion des dépendances via Composer
 // autoload.php permet de charger d'un coup toutes les dépendances installées avec composer
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
+
+use App\Controllers\CategoryController;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // on démarre la session
@@ -52,7 +55,8 @@ $router->map(
     '/',
     [
         'method' => 'home',
-        'controller' => '\App\Controllers\MainController' // On indique le FQCN de la classe
+        'controller' => 'MainController', // On indique le FQCN de la classe
+        // 'acl' => ['admin', 'catalog-manager'] on pourrait stocker les roles autorisés à cet endroit
     ],
     'main-home'
 );
@@ -62,7 +66,7 @@ $router->map(
     '/login',
     [
         'method' => 'login',
-        'controller' => '\App\Controllers\MainController' 
+        'controller' => 'MainController' 
     ],
     'main-login'
 );
@@ -72,7 +76,7 @@ $router->map(
     '/login',
     [
         'method' => 'loginExecute',
-        'controller' => '\App\Controllers\MainController' 
+        'controller' => 'MainController' 
     ],
     'main-loginExecute'
 );
@@ -82,7 +86,7 @@ $router->map(
     '/logout',
     [
         'method' => 'logout',
-        'controller' => '\App\Controllers\MainController' 
+        'controller' => 'MainController' 
     ],
     'main-logout'
 );
@@ -90,12 +94,12 @@ $router->map(
 
 $router->map(
     'GET',
-    '/category',
+    '/category', // partie qui doit correspondre avec ce qu'on a dans la barre de navigation
     [
-        'method' => 'browse',
-        'controller' => '\App\Controllers\CategoryController' 
+        'method' => 'browse', // correspond au nom de la méthode dans la classe
+        'controller' => 'CategoryController' 
     ],
-    'category-browse'
+    'category-browse' // correspond à l'identifiant utilisé dans la méthode $router->generate
 );
 
 $router->map(
@@ -103,7 +107,7 @@ $router->map(
     '/category/add',
     [
         'method' => 'add',
-        'controller' => '\App\Controllers\CategoryController'
+        'controller' => 'CategoryController'
     ],
     'category-add'
 );
@@ -113,7 +117,7 @@ $router->map(
     '/category/add',
     [
         'method' => 'addExecute',
-        'controller' => '\App\Controllers\CategoryController'
+        'controller' => 'CategoryController'
     ],
     'category-addExecute'
 );
@@ -123,7 +127,7 @@ $router->map(
     '/category/edit/[i:id]',
     [
         'method' => 'edit',
-        'controller' => '\App\Controllers\CategoryController'
+        'controller' => 'CategoryController'
     ],
     'category-edit'
 );
@@ -133,8 +137,9 @@ $router->map(
     '/category/edit/[i:id]',
     [
         'method' => 'editExecute',
-        'controller' => '\App\Controllers\CategoryController'
-    ]
+        'controller' => 'CategoryController',
+    ],
+    'category-editExecute'
 );
 
 $router->map(
@@ -142,10 +147,31 @@ $router->map(
     '/category/delete/[i:id]',
     [
         'method' => 'delete',
-        'controller' => '\App\Controllers\CategoryController'
+        'controller' => 'CategoryController'
     ],
     'category-delete'
 );
+
+$router->map(
+    'GET',
+    '/category/home',
+    [
+        'method' => 'homeEdit',
+        'controller' => 'CategoryController'
+    ],
+    'category-homeEdit'
+);
+
+$router->map(
+    'POST',
+    '/category/home',
+    [
+        'method' => 'homeEditExecute',
+        'controller' => 'CategoryController'
+    ],
+    'category-homeEditExecute'
+);
+
 
 /* PRODUCT */ 
 
@@ -154,7 +180,7 @@ $router->map(
     '/product',
     [
         'method' => 'browse',
-        'controller' => '\App\Controllers\ProductController'
+        'controller' => 'ProductController'
     ],
     'product-browse'
 );
@@ -164,7 +190,7 @@ $router->map(
     '/product/add',
     [
         'method' => 'add',
-        'controller' => '\App\Controllers\ProductController'
+        'controller' => 'ProductController'
     ],
     'product-add'
 );
@@ -174,7 +200,7 @@ $router->map(
     '/product/add',
     [
         'method' => 'addExecute',
-        'controller' => '\App\Controllers\ProductController'
+        'controller' => 'ProductController'
     ],
     'product-addExecute'
 );
@@ -184,7 +210,7 @@ $router->map(
     '/product/edit/[i:id]',
     [
         'method' => 'edit',
-        'controller' => '\App\Controllers\ProductController'
+        'controller' => 'ProductController'
     ],
     'product-edit'
 );
@@ -194,20 +220,21 @@ $router->map(
     '/product/edit/[i:id]',
     [
         'method' => 'editExecute',
-        'controller' => '\App\Controllers\ProductController'
-    ]
+        'controller' => 'ProductController'
+    ],
+    'product-editExecute'
 );
 
-/* USERS */ 
+/* APPUSER */ 
 
 $router->map(
     'GET',
-    '/user',
+    '/user', // dans l'url du navigateur
     [
-        'method' => 'browse',
-        'controller' => '\App\Controllers\UserController'
+        'method' => 'browse', // le nom de la méthode qui va être exécutée
+        'controller' => 'AppUserController' // depuis ce controleur
     ],
-    'user-browse'
+    'appuser-browse' // id de la route pour altorouter ( utile pour générermethod des urls dans notre code )
 );
 
 $router->map(
@@ -215,9 +242,9 @@ $router->map(
     '/user/add',
     [
         'method' => 'add',
-        'controller' => '\App\Controllers\UserController'
+        'controller' => 'AppUserController'
     ],
-    'user-add'
+    'appuser-add'
 );
 
 $router->map(
@@ -225,40 +252,10 @@ $router->map(
     '/user/add',
     [
         'method' => 'addExecute',
-        'controller' => '\App\Controllers\UserController'
+        'controller' => 'AppUserController'
     ],
-    'user-addExecute'
+    'appuser-addExecute'
 );
-
-$router->map(
-    'GET',
-    '/user/edit/[i:id]',
-    [
-        'method' => 'edit',
-        'controller' => '\App\Controllers\UserController'
-    ],
-    'user-edit'
-);
-
-$router->map(
-    'POST',
-    '/user/edit/[i:id]',
-    [
-        'method' => 'editExecute',
-        'controller' => '\App\Controllers\UserController'
-    ]
-);
-
-$router->map(
-    'GET',
-    '/user/delete/[i:id]',
-    [
-        'method' => 'delete',
-        'controller' => '\App\Controllers\UserController'
-    ],
-    'user-delete'
-);
-
 
 /* -------------
 --- DISPATCH ---
@@ -273,5 +270,13 @@ $match = $router->match();
 // 1er argument : la variable $match retournée par AltoRouter
 // 2e argument : le "target" (controller & méthode) pour afficher la page 404
 $dispatcher = new Dispatcher($match, '\App\Controllers\ErrorController::err404');
+
+// permet à altodispatcher de préfixer tous les FQCN de nos controller
+$dispatcher->setControllersNamespace('App\Controllers');
+
+
+// setControllerArguments permet d'envoyer des arguments aux controller instanciés.
+// on en profite pour envoyer le tableau $match utilisé pour les ACL
+$dispatcher->setControllersArguments($match, $router);
 // Une fois le "dispatcher" configuré, on lance le dispatch qui va exécuter la méthode du controller
 $dispatcher->dispatch();

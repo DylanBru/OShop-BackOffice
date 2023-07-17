@@ -26,5 +26,6 @@
 <?php
 // On inclut des sous-vues => "partials"
 include __DIR__ . '/../partials/nav.tpl.php';
-dump($_SESSION);
+include __DIR__ . '/../partials/errormessage.tpl.php';
+
 ?>

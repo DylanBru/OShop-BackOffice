@@ -6,13 +6,6 @@
         // parcourir les messages d'erreur pour les afficher dans cette div -->
     
     <form action="" method="POST" class="mt-5">
-        <?php if (! empty($errorList)) : ?>
-            <div class="alert alert-danger" role="alert">
-                <?php foreach ($errorList as $currentError) : ?>
-                    <div><?= $currentError; ?></div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="Votre email">
