@@ -6,6 +6,17 @@ use App\Models\Category;
 
 class CategoryController extends CoreController
 {
+    public function homeEditExecute()
+    {
+        foreach ($_POST["emplacement"] as $home_order => $categoryId) {
+            $categoryToUpdate = Category::find($categoryId);
+            $categoryToUpdate->setHomeOrder($home_order+1);
+            $categoryToUpdate->save();
+        }
+        $this->redirectToRoute('category-homeEdit');
+
+    }
+
     public function homeEdit()
     {
         $CategoryListForHomePage = Category::findAllHomepage();
