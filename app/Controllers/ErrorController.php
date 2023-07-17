@@ -18,4 +18,9 @@ class ErrorController extends CoreController
         // Puis on gère l'affichage
         $this->show('error/err404');
     }
+
+    public function demoAbstract()
+    {
+        
+    }
 }

@@ -13,7 +13,6 @@ class CategoryController extends CoreController
      */
     public function add()
     {
-        $this->checkAuthorization(['admin']);
         // Préparer les données ( = en général les récupérer depuis la BDD )
 
         // On appelle la méthode show() de l'objet courant
@@ -59,7 +58,6 @@ class CategoryController extends CoreController
         // on lance la requête d'insertion
         $categoryToInsert->insert();
 
-        global $router;
         // une fois le formulaire traité on redirige l'utilisateur
         $this->redirectToRoute('category-browse');
 

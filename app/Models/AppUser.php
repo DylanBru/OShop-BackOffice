@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Utils\Database;
+use PDO;
 
 class AppUser extends CoreModel
 {
@@ -54,14 +55,71 @@ class AppUser extends CoreModel
     {
 
     } 
+
+    /**
+     * Gets All Users in db
+     *
+     * @return AppUser[]
+     */
     public static function findAll()
     {
+        $pdo = Database::getPDO();
+        $sql = 'SELECT * FROM `app_user`';
+        $pdoStatement = $pdo->query($sql);
+        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class); // __CLASS__
 
+        return $results;
     }
+
+    /**
+     * Méthode permettant d'ajouter un enregistrement dans la BDD
+     *
+     * @return bool
+     */
     public function insert()
     {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
 
+        // Ecriture de la requête INSERT INTO
+        // on prépare des emplacement pour les valeurs à remplacer dans la requête
+        $sql = "
+            INSERT INTO `app_user` (email, password, firstname, lastname, role, status)
+            VALUES (:email, :password, :firstname, :lastname, :role, :status);
+        ";
+
+        // $preparedQuery est un objet PDOStatement
+        $preparedQuery = $pdo->prepare($sql);
+
+
+        // Execution de la requête d'insertion avec la méthode execute
+        // On fournit un tableau qui contient les valeurs à remplacer dans la requête
+        // il est possible de renseigner les valeurs avant de lancer execute 
+        // en utilisant les méthodes qui commencent par bind*
+        $queryIsSuccessful = $preparedQuery->execute([
+            ':email' => $this->email,
+            ':password' => $this->password,
+            ':firstname' => $this->firstname,
+            ':lastname' => $this->lastname,
+            ':role' => $this->role,
+            ':status' => $this->status,
+        ]);
+
+        // Si au moins une ligne ajoutée
+        // if ($queryIsSuccessful === true) {
+        if ($queryIsSuccessful) {
+            // Alors on récupère l'id auto-incrémenté généré par MySQL
+            $this->id = $pdo->lastInsertId();
+
+            // On retourne VRAI car l'ajout a parfaitement fonctionné
+            return true;
+            // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
+        }
+
+        // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
+        return false;
     }
+
     public function update()
     {
 

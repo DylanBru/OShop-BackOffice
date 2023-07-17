@@ -4,6 +4,44 @@ namespace App\Controllers;
 
 abstract class CoreController
 {
+    private $router;
+
+    public function __construct($match, $routerFromAltoDispatcher)
+    {
+        $this->router = $routerFromAltoDispatcher;
+        // le tableau match fournit par altoRouter dans le FC
+        // contient l'id de la route
+        // global $match;
+
+        // lorsque l'on affiche une page 404, match vaut false
+        if (is_array($match))
+        {
+            $currentRouteId = $match['name'];
+            // définition des ACCESS CONTROL LIST ( liste contrôle d'accès )
+            // ici on définit les roles pour toutes les pages que l'on souhaite sécuriser
+            require_once __DIR__ . '/../acl.php';
+    
+            // si une page n'apparait pas dans ce tableau, elle ne sera pas sécurisée
+            if (array_key_exists($currentRouteId, $acl))
+            {
+                $rolesToCheck = $acl[$currentRouteId];
+                $this->checkAuthorization($rolesToCheck);
+            }
+        }
+    }
+
+    // exemple d'injection de dépendance à l'aide d'une méthode
+    /*
+    dans le FC on aurait alors :
+
+        $controller = new CategoryController($match);
+        $controller->setRouter($router);
+    */
+    public function setRouter($router)
+    {
+        $this->router = $router;
+    }
+
     /**
      * Méthode permettant d'afficher du code HTML en se basant sur les views
      *
@@ -14,7 +52,7 @@ abstract class CoreController
     protected function show(string $viewName, $viewData = [])
     {
         // On globalise $router car on ne sait pas faire mieux pour l'instant
-        global $router;
+        $router = $this->router;
 
         // Comme $viewData est déclarée comme paramètre de la méthode show()
         // les vues y ont accès
@@ -46,10 +84,8 @@ abstract class CoreController
 
     protected function redirectToRoute($routeName)
     {
-        // TODO se débarasser de ce global !!!!
-        global $router;
         // une fois le formulaire traité on redirige l'utilisateur
-        header('Location: ' . $router->generate($routeName));
+        header('Location: ' . $this->router->generate($routeName));
 
         exit;
     }

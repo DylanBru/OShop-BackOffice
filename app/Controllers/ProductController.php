@@ -16,7 +16,6 @@ class ProductController extends CoreController
      */
     public function add()
     {
-        $this->checkAuthorization(['admin', 'catalog-manager']);
         // Préparer les données ( = en général les récupérer depuis la BDD )
         $allCategoryList = Category::findAll();
 

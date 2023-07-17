@@ -10,9 +10,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <?php if (isset($_SESSION['user_id'])) : ?>
+                <?php if ($_SESSION['user_object']->getRole() === 'admin') : ?>
                 <li class="nav-item">
-                    <a class="nav-link active" href="<?= $router->generate('main-home'); ?>">Accueil <span class="sr-only">(current)</span></a>
+                    <a class="nav-link active" href="<?= $router->generate('appuser-browse'); ?>">Utilisateurs <span class="sr-only">(current)</span></a>
                 </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $router->generate('category-browse'); ?>">Catégories</a>
                 </li>
@@ -30,9 +32,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Sélection Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= $router->generate('user-browse'); ?>">Utilisateurs</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link btn btn-danger text-light" href="<?= $router->generate('main-logout'); ?>">Déconnexion</a>
